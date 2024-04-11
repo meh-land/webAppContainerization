@@ -5,20 +5,60 @@ version: "3.8"
 services:
 
     # Web Server Service (apache2)
-    webserver:
-        container_name: php_8.2_apache_container
-        build: 
-            context: .
-            dockerfile: .
+    webserver: 
+        build: # build from custom Dockerfile (created by me)
+            # both context && dockerfile can be used to navigate to different Dockerfiles for different images for each service
+            context: . # current working directory
+            dockerfile: . # path to file ('.' here simply implies that the docker file is present in current working directory)
+        container_name: webserver # I think it is better to give containers the same name as the service they provide
         ports:
-            - 80:80
+            - "8080:80" # map http server to port 80 (standard)
         volumes:
-            - ./:/var/www
+            - ./src:/var/www # map app directory to /var/www in container (standard)
+            # - ./conf/conf.d:/etc/apache/conf.d # this is in case there is a configuration file for apache
+        environment:
         networks:
-            - ourESP
+            - ourESP # defining common network
+        depends_on:
+            - database # defining dependency
+    
+    # Database Server Service (mysql)
+    database:
+        image: mysql:8.1.0 # version is as requested by Menna
+        container_name: database # container name same as service provided
+        ports:
+            - "3306:3306" # standard
+        volumes:
+            - ./database:/var/lib/mysql # directory to store database data/files
+        environment:
+            - MYSQL_DATABASE=${DB_DATABASE} # database name
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD} # root user password
+            - MYSQL_USER=${DB_USERNAME} # user name
+            - MYSQL_PASSWORD=${DB_PASSWORD} # user password
+        networks:
+            - ourESP # defining common network
+        depends_on:
+
+    # PHPMyAdmin Service
+    phpmyadmin:
+        image: phpmyadmin:5.2.1 # image version is still up for debate /***/
+        container_name: phpmyadmin # container name same as service provided
+        ports:
+            - "3400:80"
+        volumes:
+        environment:
+        networks:
+            - ourESP 
         depends_on:
             - database
-    
+            - webserver
+        # # debatable since I dunno their use yet
+        # restart: always
+        # environment:
+        #     - PMA_HOST=mysql
+        #     - PMA_PORT=3306
+         
+
     # PHP Service
     php:
         build:
@@ -38,39 +78,15 @@ services:
             - database
             - redis
 
-    # Database Server (mysql)
-    database:
-        image: mysql:8.1.0
-        ports:
-            -   3306:3306
-        environment:
-            - MYSQL_DATABASE=${DB_DATABASE}
-            - MYSQL_USER=${DB_USERNAME}
-            - MYSQL_PASSWORD=${DB_PASSWORD}
-            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-        volumes:
-            - db-data:/var/lib/mysql
-        networks:
-            - ourESP
+    
 
-    # PHPMyAdmin Stuff
-    phpmyadmin:
-        image: phpmyadmin:5.2.1
-        container_name: phpmyadmin_container
-        restart: always
-        ports:
-            - 8080:80
-        environment:
-            - PMA_HOST=mysql
-            - PMA_PORT=3306
-        networks:
-            - ourESP        
+          
 
     # Frontend Service (npm && nodejs)
     frontend:
         # image: node:16.15.1 # this image has MULTIPLE vulnrabilities (so I am creating my own!)
-        image: nodejs_npm
-        container_name: nodejs
+        image: ahmedalyelghannam/gp_nodejs_npm:v1.0
+        container_name: nodejs_npm
         working_dir: /programs
         volumes:
             - db-data:/programs/frontend
