@@ -1,0 +1,91 @@
+# docker-compose version
+version: "3.8"
+
+# Services
+services:
+
+    # Web Server Service (apache2)
+    webserver:
+        container_name: php_8.2_apache_container
+        build: 
+            context: .
+            dockerfile: .
+        ports:
+            - 80:80
+        volumes:
+            - ./:/var/www
+        networks:
+            - ourESP
+        depends_on:
+            - database
+    
+    # PHP Service
+    php:
+        build:
+            context: .
+            target: php
+            args:
+                - APP_ENV=${APP_ENV}
+        environment:
+            - APP_ENV=${APP_ENV}
+            - CONTAINER_ROLE=app
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        ports:
+            - 8000:8000
+        depends_on:
+            - database
+            - redis
+
+    # Database Server (mysql)
+    database:
+        image: mysql:8.1.0
+        ports:
+            -   3306:3306
+        environment:
+            - MYSQL_DATABASE=${DB_DATABASE}
+            - MYSQL_USER=${DB_USERNAME}
+            - MYSQL_PASSWORD=${DB_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+        volumes:
+            - db-data:/var/lib/mysql
+        networks:
+            - ourESP
+
+    # PHPMyAdmin Stuff
+    phpmyadmin:
+        image: phpmyadmin:5.2.1
+        container_name: phpmyadmin_container
+        restart: always
+        ports:
+            - 8080:80
+        environment:
+            - PMA_HOST=mysql
+            - PMA_PORT=3306
+        networks:
+            - ourESP        
+
+    # Frontend Service (npm && nodejs)
+    frontend:
+        # image: node:16.15.1 # this image has MULTIPLE vulnrabilities (so I am creating my own!)
+        image: nodejs_npm
+        container_name: nodejs
+        working_dir: /programs
+        volumes:
+            - db-data:/programs/frontend
+        networks:
+            - ourESP
+        depends_on:
+            - webserver
+            - php
+            - database
+            - phpmyadmin
+
+# Networks
+networks:
+    ourESP:
+
+# Volumes
+volumes:
+    db-data: ~
