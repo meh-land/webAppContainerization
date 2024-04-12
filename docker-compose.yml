@@ -25,7 +25,7 @@ services:
         environment:
         # networks:
         #     - ourESP # defining common network
-        # restart: always # in case of failure, restart
+        # restart: on-failure # in case of failure, restart
         depends_on:
             - database # defining dependency
         entrypoint: ./entrypoint/entrypoint-webserver.sh # override entrypoint
@@ -47,7 +47,7 @@ services:
             - MYSQL_PASSWORD=${DB_PASSWORD} # user password
         # networks:
         #     - ourESP # defining common network
-        # restart: always # in case of failure, restart
+        # restart: on-failure # in case of failure, restart
         # depends_on:
         entrypoint: ./entrypoint/entrypoint-database.sh # override entrypoint
 
@@ -61,7 +61,7 @@ services:
         # environment:
         # networks:
         #     - ourESP # defining common network
-        # restart: always # in case of failure, restart
+        # restart: on-failure # in case of failure, restart
         depends_on:
             - database
             - webserver
@@ -84,7 +84,7 @@ services:
             - ./:/programs/frontend
         # networks:
         #     - ourESP # defining common network
-        # restart: always # in case of failure, restart
+        # restart: on-failure # in case of failure, restart
         depends_on:
             - webserver
             - database
