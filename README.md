@@ -22,3 +22,13 @@
     4. In phpmyadmin service -> make sure you use the right image version after consulting Menna.
     5. In phpmyadmin service -> reconsider using the commented objects in case you need them.
     6. Consider defining volumes outside services to make readability easier.
+
+## Third Commit
+1. Adjusted PHPMyAdmin version as per requested by Menna.
+2. Separated webserver && frontend Dockerfile's to make it easily readable/understandable. `build.dockerfile` was updated accordingly for both services to match the newly-added Dockerfile names.
+3. Created `entrypoint` directory where all entrypoint scripts are located. Each container has its own script. Each service had an `entrypoint` object added to it. 
+4. Added `restart: always` object to all services. May comment it out if it proves to be an inconvenience.
+5. New Deduction: in order to copy web app files to container, the Dockerfile must be in the same directory as said files.
+6. To Do:
+    1. Adjust `entrypoint-frontend.sh` according to the requirements listed by Menna (TBC).
+    2. Begin actual testing. **PANIIIIIK!**

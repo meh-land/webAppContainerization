@@ -9,18 +9,26 @@ services:
         build: # build from custom Dockerfile (created by me)
             # both context && dockerfile can be used to navigate to different Dockerfiles for different images for each service
             context: . # current working directory
-            dockerfile: . # path to file ('.' here simply implies that the docker file is present in current working directory)
+            dockerfile: Dockerfile_webserver # path to file ('.' here simply implies that the docker file is present in current working directory)
+        # gonna leave these here for reference
+        #     args:
+        #         - APP_ENV=${APP_ENV}
+        # environment:
+        #     - APP_ENV=${APP_ENV}
+        #     - CONTAINER_ROLE=app
         container_name: webserver # I think it is better to give containers the same name as the service they provide
         ports:
             - "8080:80" # map http server to port 80 (standard)
         volumes:
-            - ./src:/var/www # map app directory to /var/www in container (standard)
+            - ./:/var/www # map app directory to /var/www in container (standard)
             # - ./conf/conf.d:/etc/apache/conf.d # this is in case there is a configuration file for apache
         environment:
-        networks:
-            - ourESP # defining common network
+        # networks:
+        #     - ourESP # defining common network
+        # restart: always # in case of failure, restart
         depends_on:
             - database # defining dependency
+        entrypoint: ./entrypoint/entrypoint-webserver.sh # override entrypoint
     
     # Database Server Service (mysql)
     database:
@@ -30,78 +38,55 @@ services:
             - "3306:3306" # standard
         volumes:
             - ./database:/var/lib/mysql # directory to store database data/files
+        # environment vars from file
+        env_file: ./src/.env # add app project directory to know where to search for environment variables
         environment:
             - MYSQL_DATABASE=${DB_DATABASE} # database name
             - MYSQL_ROOT_PASSWORD=${DB_PASSWORD} # root user password
             - MYSQL_USER=${DB_USERNAME} # user name
             - MYSQL_PASSWORD=${DB_PASSWORD} # user password
-        networks:
-            - ourESP # defining common network
-        depends_on:
+        # networks:
+        #     - ourESP # defining common network
+        # restart: always # in case of failure, restart
+        # depends_on:
+        entrypoint: ./entrypoint/entrypoint-database.sh # override entrypoint
 
     # PHPMyAdmin Service
     phpmyadmin:
-        image: phpmyadmin:5.2.1 # image version is still up for debate /***/
+        image: phpmyadmin:5.1.1 # verified the version from Menna
         container_name: phpmyadmin # container name same as service provided
         ports:
             - "3400:80"
-        volumes:
-        environment:
-        networks:
-            - ourESP 
+        # volumes:
+        # environment:
+        # networks:
+        #     - ourESP # defining common network
+        # restart: always # in case of failure, restart
         depends_on:
             - database
             - webserver
+        entrypoint: ./entrypoint/entrypoint-phpmyadmin.sh # override entrypoint
         # # debatable since I dunno their use yet
-        # restart: always
         # environment:
         #     - PMA_HOST=mysql
         #     - PMA_PORT=3306
-         
-
-    # PHP Service
-    php:
-        build:
-            context: .
-            target: php
-            args:
-                - APP_ENV=${APP_ENV}
-        environment:
-            - APP_ENV=${APP_ENV}
-            - CONTAINER_ROLE=app
-        working_dir: /var/www
-        volumes:
-            - ./:/var/www
-        ports:
-            - 8000:8000
-        depends_on:
-            - database
-            - redis
-
-    
-
-          
-
+     
     # Frontend Service (npm && nodejs)
     frontend:
         # image: node:16.15.1 # this image has MULTIPLE vulnrabilities (so I am creating my own!)
-        image: ahmedalyelghannam/gp_nodejs_npm:v1.0
+        build: # build from custom Dockerfile (created by me)
+            # both context && dockerfile can be used to navigate to different Dockerfiles for different images for each service
+            context: . # current working directory
+            dockerfile: Dockerfile_frontend # path to file ('.' here simply implies that the docker file is present in current working directory)
         container_name: nodejs_npm
         working_dir: /programs
         volumes:
-            - db-data:/programs/frontend
-        networks:
-            - ourESP
+            - ./:/programs/frontend
+        # networks:
+        #     - ourESP # defining common network
+        # restart: always # in case of failure, restart
         depends_on:
             - webserver
-            - php
             - database
             - phpmyadmin
-
-# Networks
-networks:
-    ourESP:
-
-# Volumes
-volumes:
-    db-data: ~
+        entrypoint: ./entrypoint/entrypoint-frontend.sh # override entrypoint
