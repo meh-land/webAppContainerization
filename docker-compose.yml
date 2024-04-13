@@ -13,16 +13,16 @@ services:
         # gonna leave these here for reference
         #     args:
         #         - APP_ENV=${APP_ENV}
-        # environment:
-        #     - APP_ENV=${APP_ENV}
-        #     - CONTAINER_ROLE=app
         container_name: webserver # I think it is better to give containers the same name as the service they provide
         ports:
             - "8080:80" # map http server to port 80 (standard)
-        volumes:
-            - ./:/var/www # map app directory to /var/www in container (standard)
-            # - ./conf/conf.d:/etc/apache/conf.d # this is in case there is a configuration file for apache
         environment:
+            - BACKEND_DIR='/var/www'
+        #     - APP_ENV=${APP_ENV}
+        #     - CONTAINER_ROLE=app
+        volumes: # this mounts the content of ~/GP_laravel to /var/www (not copy && any changes in any is reflected on the OG)
+            - ~/GP_laravel:/var/www # map app directory to /var/www in container (standard)
+            # - ./conf/conf.d:/etc/apache/conf.d # this is in case there is a configuration file for apache
         # networks:
         #     - ourESP # defining common network
         # restart: on-failure # in case of failure, restart
@@ -37,9 +37,9 @@ services:
         ports:
             - "3306:3306" # standard
         volumes:
-            - ./database:/var/lib/mysql # directory to store database data/files
+            - ~/GP_laravel/database:/var/lib/mysql # directory to store database data/files
         # environment vars from file
-        env_file: ./src/.env # add app project directory to know where to search for environment variables
+        #env_file: ~/GP_laravel/.env # add app project directory to know where to search for environment variables
         environment:
             - MYSQL_DATABASE=${DB_DATABASE} # database name
             - MYSQL_ROOT_PASSWORD=${DB_PASSWORD} # root user password
@@ -65,7 +65,7 @@ services:
         depends_on:
             - database
             - webserver
-        entrypoint: ./entrypoint/entrypoint-phpmyadmin.sh # override entrypoint
+        # entrypoint: ./entrypoint/entrypoint-phpmyadmin.sh # no script is needed for phpmyadmin
         # # debatable since I dunno their use yet
         # environment:
         #     - PMA_HOST=mysql
@@ -79,14 +79,16 @@ services:
             context: . # current working directory
             dockerfile: frontend.Dockerfile # path to file ('.' here simply implies that the docker file is present in current working directory)
         container_name: nodejs_npm
-        working_dir: /programs
+        environment:
+            - FRONTEND_DIR='/app'
+        #working_dir: /app
         volumes:
-            - ./:/programs/frontend
+            - ~/web_app:/app # this mounts the content of ~/webapp to /app (not copy && any changes in any is reflected on the OG)
         # networks:
         #     - ourESP # defining common network
         # restart: on-failure # in case of failure, restart
         depends_on:
             - webserver
             - database
-            - phpmyadmin
+            #- phpmyadmin
         entrypoint: ./entrypoint/entrypoint-frontend.sh # override entrypoint

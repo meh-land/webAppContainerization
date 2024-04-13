@@ -7,8 +7,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 	
 		# use pacman
 		sudo pacman -Syu -y
-	     	sudo pacman -S git docker docker-compose -y	
-		sudo pacman -S bash-completion -y
+	    sudo pacman -S git docker docker-compose -y	
+		sudo pacman -S bash-completion -y # this one is simply for convenience
 
       	elif [[ ${DISTRIB} = "Ubuntu"* ]]; then
     	
@@ -52,11 +52,12 @@ sudo systemctl enable docker.service
 # add user to docker group
 sudo usermod -aG docker $USER
 
-# clone frontend and backend repos in a new folder
-git clone https://github.com/meh-land/GP_laravel ~/WebApp # backend
-git clone https://github.com/meh-land/web_App ~/WebApp # frontend
+# clone frontend and backend repos in container folder
+git clone https://github.com/meh-land/GP_laravel # backend
+git clone https://github.com/meh-land/web_App # frontend
 
-# copy frontend and backend data to containerize repo folder
+
+
 
 
 

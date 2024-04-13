@@ -27,4 +27,4 @@ RUN npm install -g npm@8.11.0
 SHELL ["/bin/bash", "--login", "-c"]
 
 # entrypoint script
-ENTRYPOINT [ "entrypoint/entrypoint-frontend.sh"]
+# ENTRYPOINT [ "entrypoint/entrypoint-frontend.sh"]

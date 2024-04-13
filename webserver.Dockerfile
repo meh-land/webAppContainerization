@@ -12,9 +12,9 @@ RUN pecl install -o -f redis \
 WORKDIR /var/www
 # copy from directory w.r.t Dockerfile to container directory specified above
 # PROJECT MUST BE IN SAME DIRECTORY AS THIS DOCKERFILE ###VIMP
-COPY . . 
+# COPY . . 
 
 COPY --from=composer:2.6.4 /usr/bin/composer /usr/bin/composer 
 ENV PORT=8000
 
-ENTRYPOINT [ "entrypoint/entrypoint-webserver.sh" ]
+# ENTRYPOINT [ "entrypoint/entrypoint-webserver.sh" ]

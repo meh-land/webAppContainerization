@@ -40,3 +40,9 @@
 ## Fifth Commit
 1. Changed the dockerfiles' names to abide by their naming conventions.
 2. Made sure to edit their names in the docker-compose file.
+
+## Sixth Commit
+1. Finished `entrypoint-frontend` script.
+2. Added environment variables for webserver && frontend file directories in containers for their `entrypoint` scripts.
+3. Decided to use the `volume` object instead of copying project files because it maps a directory on your hostmachine to the container (does not copy) + any changes in the container data is reflected directly.
+4. To Do: Test each service in the docker-compose file separately to make sure everything works as intended.
