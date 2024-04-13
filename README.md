@@ -32,3 +32,7 @@
 6. To Do:
     1. Adjust `entrypoint-frontend.sh` according to the requirements listed by Menna (TBC).
     2. Begin actual testing. **PANIIIIIK!**
+
+## Forth Commit
+1. Added installation script: installs docker and its utilities and clones repos. It should be only run once. **NOTE:** I still did not write a line in this script to copy repositories to container folder.
+2. Added a launch script: it simply uses docker compose to build and launch everything. It should be run each time the app has to be launched.
