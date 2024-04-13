@@ -9,7 +9,7 @@ services:
         build: # build from custom Dockerfile (created by me)
             # both context && dockerfile can be used to navigate to different Dockerfiles for different images for each service
             context: . # current working directory
-            dockerfile: Dockerfile.webserver # path to file ('.' here simply implies that the docker file is present in current working directory)
+            dockerfile: webserver.Dockerfile # path to file ('.' here simply implies that the docker file is present in current working directory)
         # gonna leave these here for reference
         #     args:
         #         - APP_ENV=${APP_ENV}
@@ -77,7 +77,7 @@ services:
         build: # build from custom Dockerfile (created by me)
             # both context && dockerfile can be used to navigate to different Dockerfiles for different images for each service
             context: . # current working directory
-            dockerfile: Dockerfile.frontend # path to file ('.' here simply implies that the docker file is present in current working directory)
+            dockerfile: frontend.Dockerfile # path to file ('.' here simply implies that the docker file is present in current working directory)
         container_name: nodejs_npm
         working_dir: /programs
         volumes:
