@@ -21,7 +21,7 @@ services:
         #     - APP_ENV=${APP_ENV}
         #     - CONTAINER_ROLE=app
         volumes: # this mounts the content of ~/GP_laravel to /var/www (not copy && any changes in any is reflected on the OG)
-            - ~/GP_laravel:/var/www # map app directory to /var/www in container (standard)
+            - ~/WebApp/GP_laravel:/var/www # map app directory to /var/www in container (standard)
             # - ./conf/conf.d:/etc/apache/conf.d # this is in case there is a configuration file for apache
         # networks:
         #     - ourESP # defining common network
@@ -37,7 +37,7 @@ services:
         ports:
             - "3306:3306" # standard
         volumes:
-            - ~/GP_laravel/database:/var/lib/mysql # directory to store database data/files
+            - ~/WebApp/GP_laravel/database:/var/lib/mysql # directory to store database data/files
         # environment vars from file
         #env_file: ~/GP_laravel/.env # add app project directory to know where to search for environment variables
         environment:
@@ -78,12 +78,12 @@ services:
             # both context && dockerfile can be used to navigate to different Dockerfiles for different images for each service
             context: . # current working directory
             dockerfile: frontend.Dockerfile # path to file ('.' here simply implies that the docker file is present in current working directory)
-        container_name: nodejs_npm
-        environment:
-            - FRONTEND_DIR='/app'
+        container_name: frontend
+        # environment:
+        #     - FRONTEND_DIR='/app'
         #working_dir: /app
-        volumes:
-            - ~/web_app:/app # this mounts the content of ~/webapp to /app (not copy && any changes in any is reflected on the OG)
+        # volumes:
+        #     - ~/WebApp/web_app:/app # this mounts the content of ~/webapp to /app (not copy && any changes in any is reflected on the OG)
         # networks:
         #     - ourESP # defining common network
         # restart: on-failure # in case of failure, restart
@@ -91,4 +91,4 @@ services:
             - webserver
             - database
             #- phpmyadmin
-        entrypoint: ./entrypoint/entrypoint-frontend.sh # override entrypoint
+        # entrypoint: ./entrypoint/entrypoint-frontend.sh # override entrypoint

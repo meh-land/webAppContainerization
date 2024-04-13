@@ -1,0 +1,28 @@
+# docker-compose version
+version: "3.8"
+
+# Services
+services:
+
+   
+    # Frontend Service (npm && nodejs)
+    frontend:
+        # image: node:16.15.1 # this image has MULTIPLE vulnrabilities (so I am creating my own!)
+        build: # build from custom Dockerfile (created by me)
+            # both context && dockerfile can be used to navigate to different Dockerfiles for different images for each service
+            context: . # current working directory
+            dockerfile: frontend.Dockerfile # path to file ('.' here simply implies that the docker file is present in current working directory)
+        container_name: frontend
+        # environment:
+        #     - FRONTEND_DIR='/app'
+        #working_dir: /app
+        # volumes:
+        #     - ./web_App:/app # this mounts the content of ~/webapp to /app (not copy && any changes in any is reflected on the OG)
+        # networks:
+        #     - ourESP # defining common network
+        restart: on-failure # in case of failure, restart
+        # depends_on:
+        #     - webserver
+        #     - database
+        #     #- phpmyadmin
+        #entrypoint: ./entrypoint-frontend.sh # override entrypoint

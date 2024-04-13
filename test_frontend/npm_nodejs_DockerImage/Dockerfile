@@ -24,19 +24,6 @@ RUN nvm use 16.15.1
 RUN npm install -g npm@8.11.0
 
 # return shell to non-interactive mode to stop docker's yelling
-RUN mkdir -p /frontend
-WORKDIR /frontend
-COPY ./web_App .
-
-WORKDIR /frontend/web_App
-# have to rerun npm install
-RUN npm install
-RUN npm start &
-
-# set default shell (login as root && launch an INTERACTIVE SHELL)
-SHELL ["/bin/bash", "--login", "-i", "-c"]
-
-# entrypoint script
-ENTRYPOINT [ "/bin/bash"]
+SHELL ["/bin/bash", "--login", "-c"]
 
 

@@ -46,3 +46,8 @@
 2. Added environment variables for webserver && frontend file directories in containers for their `entrypoint` scripts.
 3. Decided to use the `volume` object instead of copying project files because it maps a directory on your hostmachine to the container (does not copy) + any changes in the container data is reflected directly.
 4. To Do: Test each service in the docker-compose file separately to make sure everything works as intended.
+
+## Seventh Commit
+1. Created a scaled down version of `docker-compose.yml` to test frontend container as the only service.
+2. Adjusted `frontend.Dockerfile` to create project directory in container, copy project in said directory, and launch `npm` successfully without errors. **YAY!**
+3. To Do: Create a scaled down version of `docker-compose.yml` to test backend && database containers.

@@ -1,0 +1,1 @@
+This folder is has a scaled down version of docker-compose.yml for testing purposes. It is kept here for reference.
