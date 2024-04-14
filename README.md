@@ -51,3 +51,9 @@
 1. Created a scaled down version of `docker-compose.yml` to test frontend container as the only service.
 2. Adjusted `frontend.Dockerfile` to create project directory in container, copy project in said directory, and launch `npm` successfully without errors. **YAY!**
 3. To Do: Create a scaled down version of `docker-compose.yml` to test backend && database containers.
+
+## Eighth Commit
+1. Created a test environment for webserver container (php + apache2 + composer).
+2. Adjusted multiple things in webserver container image to get it to work as intended. (installed packages + created right directories + solved issues)
+3. Fixed my problem with entrypoint scripts. Now added entrypoint scripts for both frontend && webserver work as intended to launch app upon entry.
+4. To Do: Get database container to work + have to mount app folder in order for both webserver and database to access the same files.

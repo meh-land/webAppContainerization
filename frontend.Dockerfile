@@ -9,7 +9,7 @@ RUN apt update
 RUN apt upgrade -y
 
 # install curl to run set up script
-RUN apt install curl -y
+RUN apt install -y curl git vim
 
 # set default shell (login as root && launch an INTERACTIVE SHELL)
 SHELL ["/bin/bash", "--login", "-i", "-c"]
@@ -23,20 +23,23 @@ RUN nvm install 16.15.1
 RUN nvm use 16.15.1
 RUN npm install -g npm@8.11.0
 
-# return shell to non-interactive mode to stop docker's yelling
+# copy web_App to container
 RUN mkdir -p /frontend
 WORKDIR /frontend
 COPY ./web_App .
 
-WORKDIR /frontend/web_App
+
 # have to rerun npm install
+WORKDIR /frontend/web_App
 RUN npm install
-RUN npm start &
 
-# set default shell (login as root && launch an INTERACTIVE SHELL)
-SHELL ["/bin/bash", "--login", "-i", "-c"]
+# copy entrypoint script to container
+COPY ./entrypoint/entrypoint-frontend.sh .
 
-# entrypoint script
-ENTRYPOINT [ "/bin/bash"]
+# return shell to non-interactive mode to stop docker's yelling
+SHELL ["/bin/bash", "--login", "-c"]
+
+# entrypoint script to start npm in the background
+ENTRYPOINT [ "/bin/bash", "entrypoint-frontend.sh"]
 
 

@@ -27,9 +27,8 @@ RUN mv composer.phar /usr/local/bin/composer
 
 # change working directory && copy backend files to container
 WORKDIR /var/www
-
-# copy entrypoint script to container
-COPY ./entrypoint/entrypoint-webserver.sh .
+COPY ./GP_laravel .
+COPY entrypoint-webserver.sh .
 
 # install composer stuff
 RUN composer install --no-progress --no-interaction
@@ -40,6 +39,6 @@ RUN composer global require laravel/installer
 # return shell to non-interactive mode to stop docker's yelling
 SHELL ["/bin/bash", "--login", "-c"]
 
-# entrypoint script
-# ENV PORT=8000
+# entrypoint script to launch webserver
+#ENV PORT=8000
 ENTRYPOINT [ "/bin/bash", "entrypoint-webserver.sh"]
