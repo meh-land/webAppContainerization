@@ -23,8 +23,8 @@ services:
         volumes: # this mounts the content of ~/GP_laravel to /var/www (not copy && any changes in any is reflected on the OG)
             - ~/WebApp/GP_laravel:/var/www # map app directory to /var/www in container (standard)
             # - ./conf/conf.d:/etc/apache/conf.d # this is in case there is a configuration file for apache
-        # networks:
-        #     - ourESP # defining common network
+        networks:
+            - netUwUrk # defining common network
         # restart: on-failure # in case of failure, restart
         depends_on:
             - database # defining dependency
@@ -42,11 +42,11 @@ services:
         #env_file: ~/GP_laravel/.env # add app project directory to know where to search for environment variables
         environment:
             - MYSQL_DATABASE=${DB_DATABASE} # database name
-            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD} # root user password
+            # - MYSQL_ROOT_PASSWORD=${DB_PASSWORD} # root user password
             - MYSQL_USER=${DB_USERNAME} # user name
             - MYSQL_PASSWORD=${DB_PASSWORD} # user password
-        # networks:
-        #     - ourESP # defining common network
+        networks:
+            - netUwUrk # defining common network
         # restart: on-failure # in case of failure, restart
         # depends_on:
         entrypoint: ./entrypoint/entrypoint-database.sh # override entrypoint
@@ -59,8 +59,8 @@ services:
             - "3400:80"
         # volumes:
         # environment:
-        # networks:
-        #     - ourESP # defining common network
+        networks:
+            - netUwUrk # defining common network
         # restart: on-failure # in case of failure, restart
         depends_on:
             - database
@@ -84,11 +84,23 @@ services:
         #working_dir: /app
         # volumes:
         #     - ~/WebApp/web_app:/app # this mounts the content of ~/webapp to /app (not copy && any changes in any is reflected on the OG)
-        # networks:
-        #     - ourESP # defining common network
+        networks:
+            - netUwUrk # defining common network
         # restart: on-failure # in case of failure, restart
         depends_on:
             - webserver
             - database
             #- phpmyadmin
         # entrypoint: ./entrypoint/entrypoint-frontend.sh # override entrypoint
+
+volumes:
+    backend_data:
+        driver: local
+        driver_opts:
+            type: none
+            device: ./GP_laravel
+            o: bind
+
+networks:
+    netUwUrk:
+        driver: bridge

@@ -57,3 +57,7 @@
 2. Adjusted multiple things in webserver container image to get it to work as intended. (installed packages + created right directories + solved issues)
 3. Fixed my problem with entrypoint scripts. Now added entrypoint scripts for both frontend && webserver work as intended to launch app upon entry.
 4. To Do: Get database container to work + have to mount app folder in order for both webserver and database to access the same files.
+
+## Ninth Commit
+1. Readded `network` and `volume` objects---with right syntax this time. 
+2. Edited `setup-script.sh` to create `.env` and populate/edit necessary environment variables.
