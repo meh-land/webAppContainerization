@@ -72,6 +72,9 @@ sed -i '/DB_PASSWORD=/c\DB_PASSWORD='${user_pass}'' .env
 # replace DB_HOST with database (mysql service name)
 sed -i '/DB_HOST=127.0.0.1/c\DB_HOST='${db_host}'' .env
 
+# return to webAppContainerization directory
+cd ..
+
 
 
 
