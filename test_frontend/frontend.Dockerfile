@@ -31,7 +31,7 @@ COPY ./web_App .
 WORKDIR /frontend/web_App
 # have to rerun npm install
 RUN npm install
-RUN npm start &
+RUN npm start 
 
 # set default shell (login as root && launch an INTERACTIVE SHELL)
 SHELL ["/bin/bash", "--login", "-i", "-c"]

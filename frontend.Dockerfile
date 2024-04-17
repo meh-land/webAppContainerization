@@ -1,5 +1,5 @@
 # use ubuntu focal as base image
-FROM ubuntu:focal AS nodejs_npm
+FROM ubuntu:focal
 
 # set user as root
 USER root
@@ -9,7 +9,10 @@ RUN apt update
 RUN apt upgrade -y
 
 # install curl to run set up script
-RUN apt install -y curl git vim
+RUN apt install curl -y
+
+# install ping for debugging network
+RUN apt install inetutils-ping -y
 
 # set default shell (login as root && launch an INTERACTIVE SHELL)
 SHELL ["/bin/bash", "--login", "-i", "-c"]
@@ -23,23 +26,24 @@ RUN nvm install 16.15.1
 RUN nvm use 16.15.1
 RUN npm install -g npm@8.11.0
 
-# copy web_App to container
+# return shell to non-interactive mode to stop docker's yelling
 RUN mkdir -p /frontend
 WORKDIR /frontend
 COPY ./web_App .
 
-
-# have to rerun npm install
 WORKDIR /frontend/web_App
+# have to rerun npm install
 RUN npm install
+#RUN npm start 
 
-# copy entrypoint script to container
-COPY ./entrypoint/entrypoint-frontend.sh .
+# set default shell (login as root && launch an INTERACTIVE SHELL)
+# SHELL ["/bin/bash", "--login", "-c"]
 
-# return shell to non-interactive mode to stop docker's yelling
-SHELL ["/bin/bash", "--login", "-c"]
+CMD npm start 
 
-# entrypoint script to start npm in the background
-ENTRYPOINT [ "/bin/bash", "entrypoint-frontend.sh"]
+# ENTRYPOINT [ "/bin/bash", "" ]
+
+# entrypoint script
+#ENTRYPOINT [ "/bin/bash"]
 
 

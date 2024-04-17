@@ -1,0 +1,150 @@
+.Membership {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  overflow-y: hidden;
+  background-image: url("../../images/bg.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+.Membership .form-wrapper form .error-msg {
+  color: red;
+  font-size: 0.8rem;
+  margin: -1.5rem 0 1rem;
+  border-radius: 1px;
+}
+
+.Membership .wrapper {
+  position: relative;
+  width: 400px;
+  height: 520px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  margin: 100px 0 0 100px;
+}
+
+.Membership .form-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  transition: 1s ease-in-out;
+}
+
+.Membership .wrapper.active .form-wrapper.sign-in {
+  transform: scale(0) translate(-300px, 500px);
+}
+
+.Membership .wrapper .form-wrapper.sign-up {
+  position: absolute;
+  top: 0;
+  transform: scale(0) translate(200px, -500px);
+}
+
+.Membership .wrapper.active .form-wrapper.sign-up {
+  transform: scale(1) translate(0, 0);
+}
+
+h2 {
+  font-size: 30px;
+  color: #fff;
+  text-align: center;
+}
+
+.Membership .input-group {
+  position: relative;
+  margin: 10px 0 30px 0;
+  display: flex;
+  border-bottom: 2px solid #fff;
+  flex-wrap: nowrap;
+}
+
+.Membership .input-group label {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  font-weight: bolder;
+  color: var(--bs-teal);
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.Membership .input-group input {
+  width: 320px;
+  height: 30px;
+  font-size: 16px;
+  color: #fff;
+  padding: 0 5px;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.Membership .form-wrapper input:focus + label,
+.Membership .form-wrapper input:not(:placeholder-shown) + label,
+.Membership .form-wrapper input:active + label {
+  top: -5px;
+}
+
+.Membership .remember {
+  margin: 15px 0 15px 5px;
+}
+
+.Membership .remember color {
+  color: #fff;
+  font-size: 14px;
+}
+
+.Membership .remember label input {
+  accent-color: var(--bs-teal);
+  margin-right: 5px;
+}
+
+.Membership form button {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  background: var(--bs-teal);
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+}
+
+.Membership .signUp-link {
+  font-size: 14px;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.Membership .signUp-link p {
+  color: var(--bs-teal);
+}
+
+.Membership .signUp-link p span {
+  color: var(--bs-teal);
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 10px;
+}
+
+.Membership .signUp-link p span:hover {
+  text-decoration: underline;
+}
